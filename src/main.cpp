@@ -36,7 +36,7 @@ void usercontrol(void) {
     } else {
 
       right_arm.spinToPosition(180, degrees);
-      left_arm.spinToPosition(90, degrees);
+      left_arm.spinToPosition(180, degrees);
 
       wait(20, msec);
 
