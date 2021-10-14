@@ -20,7 +20,14 @@ void pre_auton(void) {
 }
 
 void autonomous(void) {
-  
+  bool active = true;
+  while(active) {
+    if (OpticalSensor.isNearObject() == false) {
+      Drivetrain.drive(forward);
+    } else {
+      Drivetrain.stop();
+    }
+  }
 }
 
 void usercontrol(void) {
