@@ -12,10 +12,13 @@ controller Controller1 = controller(primary);
 motor LeftDriveSmart = motor(PORT11, ratio36_1, true);
 motor RightDriveSmart = motor(PORT20, ratio36_1, false);
 drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.19, 295, 40, mm, 1);
-motor armsMotorA = motor(PORT18, ratio36_1, false);
+motor armsMotorA = motor(PORT19, ratio36_1, false);
 motor armsMotorB = motor(PORT1, ratio36_1, true);
 motor_group arms = motor_group(armsMotorA, armsMotorB);
-optical OpticalSensor = optical(PORT2);
+optical OpticalSensor = optical(PORT10);
+motor left_armMotorA = motor(PORT9, ratio36_1, false);
+motor left_armMotorB = motor(PORT3, ratio36_1, false);
+motor_group left_arm = motor_group(left_armMotorA, left_armMotorB);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable
