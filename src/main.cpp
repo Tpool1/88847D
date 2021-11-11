@@ -3,9 +3,9 @@
 // [Name]               [Type]        [Port(s)]
 // Controller1          controller                    
 // Drivetrain           drivetrain    11, 20          
-// arms                 motor_group   19, 1           
 // OpticalSensor        optical       10              
-// left_arm             motor_group   9, 3            
+// left_arm             motor_group   2, 9            
+// right_arm            motor_group   3, 1            
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -28,28 +28,26 @@ void autonomous(void) {
       Drivetrain.drive(forward);
     } else {
       Drivetrain.stop();
-      active = false;
     }
   }
 }
 
 void usercontrol(void) {
 
-  left_arm.setVelocity(5, percent);
+  left_arm.setVelocity(15, percent);
+  right_arm.setVelocity(15, percent);
 
   while (1) {
 
-    if (Controller1.ButtonR1.pressing()) {
-      arms.spin(forward);
-    } else if (Controller1.ButtonL1.pressing()){
-      arms.spin(reverse);
-    } else if (Controller1.ButtonR2.pressing()) {
+    if (Controller1.ButtonR2.pressing()) {
       left_arm.spin(forward);
+      right_arm.spin(forward);
     } else if (Controller1.ButtonL2.pressing()) {
       left_arm.spin(reverse);
+      right_arm.spin(reverse);
     } else {
-      arms.stop();
       left_arm.stop();
+      right_arm.stop();
     }
 
     if (OpticalSensor.isNearObject()) {
