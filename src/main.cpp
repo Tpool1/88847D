@@ -21,18 +21,10 @@ void pre_auton(void) {
 }
 
 void autonomous(void) {
-  Drivetrain.driveFor(forward, 10, inches); 
+  Drivetrain.driveFor(forward, 55, inches); 
   left_arm.spinToPosition(25, degrees);
   right_arm.spinToPosition(25, degrees);
 
-  bool active = true;
-  while(active) {
-    if (OpticalSensor.color() == purple) {
-      Drivetrain.stop();
-    } else {
-      Drivetrain.drive(forward);
-    }
-  }   
 }
 
 void usercontrol(void) {
@@ -48,6 +40,12 @@ void usercontrol(void) {
     } else if (Controller1.ButtonL2.pressing()) {
       left_arm.spin(reverse);
       right_arm.spin(reverse);
+    } else if (Controller1.ButtonR1.pressing()) {
+      left_arm.spin(reverse);
+      right_arm.spin(reverse);
+    } else if (Controller1.ButtonL1.pressing()) {
+      left_arm.spin(forward);
+      right_arm.spin(forward);
     } else {
       left_arm.stop();
       right_arm.stop();

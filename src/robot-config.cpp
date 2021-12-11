@@ -14,8 +14,8 @@ motor_group LeftDriveSmart = motor_group(leftMotorA, leftMotorB);
 motor rightMotorA = motor(PORT12, ratio18_1, true);
 motor rightMotorB = motor(PORT8, ratio18_1, true);
 motor_group RightDriveSmart = motor_group(rightMotorA, rightMotorB);
-inertial TurnGyroSmart = inertial(PORT5);
-smartdrive Drivetrain = smartdrive(LeftDriveSmart, RightDriveSmart, TurnGyroSmart, 319.19, 320, 40, mm, 1);
+inertial DrivetrainInertial = inertial(PORT5);
+smartdrive Drivetrain = smartdrive(LeftDriveSmart, RightDriveSmart, DrivetrainInertial, 319.19, 320, 40, mm, 1);
 optical OpticalSensor = optical(PORT10);
 controller Controller1 = controller(primary);
 motor left_armMotorA = motor(PORT1, ratio18_1, true);
@@ -39,10 +39,10 @@ int rc_auto_loop_function_Controller1() {
   while(true) {
     if(RemoteControlCodeEnabled) {
       // calculate the drivetrain motor velocities from the controller joystick axies
-      // left = Axis3 + Axis1
-      // right = Axis3 - Axis1
-      int drivetrainLeftSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
-      int drivetrainRightSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
+      // left = Axis3
+      // right = Axis2
+      int drivetrainLeftSideSpeed = Controller1.Axis3.position();
+      int drivetrainRightSideSpeed = Controller1.Axis2.position();
       
       // check if the value is inside of the deadband range
       if (drivetrainLeftSideSpeed < 5 && drivetrainLeftSideSpeed > -5) {
@@ -96,12 +96,12 @@ int rc_auto_loop_function_Controller1() {
 void vexcodeInit( void ) {
   Brain.Screen.print("Device initialization...");
   Brain.Screen.setCursor(2, 1);
-  // calibrate the drivetrain gyro
+  // calibrate the drivetrain Inertial
   wait(200, msec);
-  TurnGyroSmart.calibrate();
-  Brain.Screen.print("Calibrating Gyro for Drivetrain");
-  // wait for the gyro calibration process to finish
-  while (TurnGyroSmart.isCalibrating()) {
+  DrivetrainInertial.calibrate();
+  Brain.Screen.print("Calibrating Inertial for Drivetrain");
+  // wait for the Inertial calibration process to finish
+  while (DrivetrainInertial.isCalibrating()) {
     wait(25, msec);
   }
   // reset the screen now that the calibration is complete
