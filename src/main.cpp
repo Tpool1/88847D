@@ -22,15 +22,15 @@ void pre_auton(void) {
 
 void autonomous(void) {
   Drivetrain.driveFor(forward, 55, inches); 
-  left_arm.spinToPosition(25, degrees);
-  right_arm.spinToPosition(25, degrees);
+  left_arm.spinToPosition(20, degrees);
+  right_arm.spinToPosition(20, degrees);
 
 }
 
 void usercontrol(void) {
 
-  left_arm.setVelocity(15, percent);
-  right_arm.setVelocity(15, percent);
+  left_arm.setVelocity(40, percent);
+  right_arm.setVelocity(40, percent);
 
   while (1) {
 
