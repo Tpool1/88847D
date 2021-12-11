@@ -8,13 +8,22 @@ using code = vision::code;
 brain  Brain;
 
 // VEXcode device constructors
+motor leftMotorA = motor(PORT11, ratio18_1, false);
+motor leftMotorB = motor(PORT4, ratio18_1, false);
+motor_group LeftDriveSmart = motor_group(leftMotorA, leftMotorB);
+motor rightMotorA = motor(PORT12, ratio18_1, true);
+motor rightMotorB = motor(PORT8, ratio18_1, true);
+motor_group RightDriveSmart = motor_group(rightMotorA, rightMotorB);
+inertial TurnGyroSmart = inertial(PORT5);
+smartdrive Drivetrain = smartdrive(LeftDriveSmart, RightDriveSmart, TurnGyroSmart, 319.19, 320, 40, mm, 1);
+optical OpticalSensor = optical(PORT10);
 controller Controller1 = controller(primary);
-motor LeftDriveSmart = motor(PORT11, ratio36_1, false);
-motor RightDriveSmart = motor(PORT20, ratio36_1, true);
-drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.19, 295, 40, mm, 1);
-motor armsMotorA = motor(PORT18, ratio36_1, false);
-motor armsMotorB = motor(PORT1, ratio36_1, true);
-motor_group arms = motor_group(armsMotorA, armsMotorB);
+motor left_armMotorA = motor(PORT1, ratio18_1, true);
+motor left_armMotorB = motor(PORT3, ratio18_1, true);
+motor_group left_arm = motor_group(left_armMotorA, left_armMotorB);
+motor right_armMotorA = motor(PORT9, ratio18_1, false);
+motor right_armMotorB = motor(PORT2, ratio18_1, false);
+motor_group right_arm = motor_group(right_armMotorA, right_armMotorB);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable
@@ -85,5 +94,20 @@ int rc_auto_loop_function_Controller1() {
  * This should be called at the start of your int main function.
  */
 void vexcodeInit( void ) {
+  Brain.Screen.print("Device initialization...");
+  Brain.Screen.setCursor(2, 1);
+  // calibrate the drivetrain gyro
+  wait(200, msec);
+  TurnGyroSmart.calibrate();
+  Brain.Screen.print("Calibrating Gyro for Drivetrain");
+  // wait for the gyro calibration process to finish
+  while (TurnGyroSmart.isCalibrating()) {
+    wait(25, msec);
+  }
+  // reset the screen now that the calibration is complete
+  Brain.Screen.clearScreen();
+  Brain.Screen.setCursor(1,1);
   task rc_auto_loop_task_Controller1(rc_auto_loop_function_Controller1);
+  wait(50, msec);
+  Brain.Screen.clearScreen();
 }
