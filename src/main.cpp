@@ -21,9 +21,21 @@ void pre_auton(void) {
 }
 
 void autonomous(void) {
+
+  left_arm.spinTo(-20, degrees);
+  right_arm.spinTo(-20, degrees);
+
   Drivetrain.driveFor(forward, 55, inches); 
-  left_arm.spinToPosition(20, degrees);
-  right_arm.spinToPosition(20, degrees);
+
+  left_arm.spinTo(-90, degrees);
+  right_arm.spinTo(-90, degrees);
+
+  wait(1, sec);
+
+  left_arm.spinTo(-20, degrees);
+  right_arm.spinTo(-20, degrees);
+
+  Drivetrain.driveFor(reverse, 55, inches);
 
 }
 
