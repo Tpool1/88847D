@@ -20,19 +20,48 @@ void pre_auton(void) {
 
 }
 
+// functions for commonly utilized controls
+void spin_arms_to_degree(int positon_degree) {
+  left_arm.spinTo(positon_degree, degrees);
+  right_arm.spinTo(positon_degree, degrees);
+}
+
+void spin_arms_forward(void) {
+  left_arm.spin(forward);
+  right_arm.spin(forward);
+}
+
+void spin_arms_reverse(void) {
+  left_arm.spin(reverse);
+  right_arm.spin(reverse);
+}
+
+void stop_arms(void) {
+  left_arm.stop();
+  right_arm.stop();
+}
+
 void autonomous(void) {
 
-  left_arm.spinTo(-90, degrees);
-  right_arm.spinTo(-90, degrees);
+  // initiallly lift arms to go down on goal
+  spin_arms_to_degree(-90);
 
+  // drive forward towards goal
   Drivetrain.driveFor(forward, 55, inches); 
 
   wait(1, sec);
 
-  left_arm.spinTo(-20, degrees);
-  right_arm.spinTo(-20, degrees);
+  // move down arms to clamp down on goal
+  spin_arms_to_degree(-20);
 
+  // drive back to initial position
   Drivetrain.driveFor(reverse, 55, inches);
+
+  Drivetrain.turnToHeading(-90, degrees);
+
+  spin_arms_to_degree(-90);
+
+  spin_arms_to_degree(-20);
 
 }
 
@@ -44,20 +73,15 @@ void usercontrol(void) {
   while (1) {
 
     if (Controller1.ButtonR2.pressing()) {
-      left_arm.spin(forward);
-      right_arm.spin(forward);
+      spin_arms_forward();
     } else if (Controller1.ButtonL2.pressing()) {
-      left_arm.spin(reverse);
-      right_arm.spin(reverse);
+      spin_arms_reverse();
     } else if (Controller1.ButtonR1.pressing()) {
-      left_arm.spin(reverse);
-      right_arm.spin(reverse);
+      spin_arms_reverse();
     } else if (Controller1.ButtonL1.pressing()) {
-      left_arm.spin(forward);
-      right_arm.spin(forward);
+      spin_arms_forward();
     } else {
-      left_arm.stop();
-      right_arm.stop();
+      stop_arms();
     }
 
     if (OpticalSensor.isNearObject()) {
