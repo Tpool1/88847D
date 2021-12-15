@@ -57,11 +57,13 @@ void autonomous(void) {
   // drive back to initial position
   Drivetrain.driveFor(reverse, 55, inches);
 
-  Drivetrain.turnToHeading(-90, degrees);
+  Drivetrain.turnToHeading(90, degrees);
 
   spin_arms_to_degree(-90);
 
   spin_arms_to_degree(-20);
+
+  Drivetrain.driveFor(forward, 52, inches);
 
 }
 
