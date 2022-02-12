@@ -3,11 +3,9 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// Drivetrain           drivetrain    11, 4, 12, 8, 5 
-// OpticalSensor        optical       10              
+// Drivetrain           drivetrain    20, 19, 11, 12, 18
 // Controller1          controller                    
-// left_arm             motor_group   1, 3            
-// right_arm            motor_group   9, 2            
+// arms                 motor_group   16, 13          
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 using namespace vex;
@@ -20,39 +18,80 @@ void pre_auton(void) {
 
 }
 
-void autonomous(void) {
+// functions for commonly utilized controls
+void spin_arms_to_degree(int positon_degree) {
+  arms.spinTo(positon_degree, degrees);
+}
+
+void spin_arms_forward(void) {
+  arms.spin(forward);
+}
+
+void spin_arms_reverse(void) {
+  arms.spin(reverse);
+}
+
+void stop_arms(void) {
+  arms.stop();
+}
+
+void autonomousLeft(void) {
+
+  Brain.Screen.newLine();
+  Brain.Screen.print("left auton started");
+
+  // initiallly lift arms to go down on goal
+  spin_arms_to_degree(90*4);
+
+  Drivetrain.turnToHeading(12, degrees);
+
+  // drive forward towards goal
   Drivetrain.driveFor(forward, 55, inches); 
-  left_arm.spinToPosition(20, degrees);
-  right_arm.spinToPosition(20, degrees);
+
+  wait(1, sec);
+
+  // move down arms to clamp down on goal
+  spin_arms_to_degree(20*4);
+
+  Drivetrain.turnToHeading(12, degrees);
+
+  // drive back to initial position
+  Drivetrain.driveFor(reverse, 55, inches);
+
+}
+
+void autonomousRight(void) {
+
+  // initiallly lift arms to go down on goal
+  spin_arms_to_degree(90*4);
+
+  // drive forward towards goal
+  Drivetrain.driveFor(forward, 55, inches); 
+
+  wait(1, sec);
+
+  // move down arms to clamp down on goal
+  spin_arms_to_degree(20*4);
+
+  // drive back to initial position
+  Drivetrain.driveFor(reverse, 55, inches);
 
 }
 
 void usercontrol(void) {
 
-  left_arm.setVelocity(40, percent);
-  right_arm.setVelocity(40, percent);
-
   while (1) {
 
     if (Controller1.ButtonR2.pressing()) {
-      left_arm.spin(forward);
-      right_arm.spin(forward);
+      spin_arms_forward();
     } else if (Controller1.ButtonL2.pressing()) {
-      left_arm.spin(reverse);
-      right_arm.spin(reverse);
+      spin_arms_reverse();
     } else if (Controller1.ButtonR1.pressing()) {
-      left_arm.spin(reverse);
-      right_arm.spin(reverse);
+      spin_arms_reverse();
     } else if (Controller1.ButtonL1.pressing()) {
-      left_arm.spin(forward);
-      right_arm.spin(forward);
+      spin_arms_forward();
     } else {
-      left_arm.stop();
-      right_arm.stop();
-    }
-
-    if (OpticalSensor.isNearObject()) {
-      Brain.Screen.print("Object found");
+      stop_arms();
     }
 
     wait(20, msec); 
@@ -62,11 +101,13 @@ void usercontrol(void) {
 
 int main() {
 
-  Competition.autonomous(autonomous);
-  Competition.drivercontrol(usercontrol);
+  Drivetrain.setDriveVelocity(65, percent);
 
-  OpticalSensor.setLightPower(100, percent);
-  OpticalSensor.setLight(ledState::on);
+  arms.setVelocity(70, percent);
+
+  Competition.autonomous(autonomousLeft);
+
+  Competition.drivercontrol(usercontrol);
 
   pre_auton();
 

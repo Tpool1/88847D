@@ -8,22 +8,18 @@ using code = vision::code;
 brain  Brain;
 
 // VEXcode device constructors
-motor leftMotorA = motor(PORT11, ratio18_1, false);
-motor leftMotorB = motor(PORT4, ratio18_1, false);
+motor leftMotorA = motor(PORT20, ratio18_1, false);
+motor leftMotorB = motor(PORT19, ratio18_1, false);
 motor_group LeftDriveSmart = motor_group(leftMotorA, leftMotorB);
-motor rightMotorA = motor(PORT12, ratio18_1, true);
-motor rightMotorB = motor(PORT8, ratio18_1, true);
+motor rightMotorA = motor(PORT11, ratio18_1, true);
+motor rightMotorB = motor(PORT12, ratio18_1, true);
 motor_group RightDriveSmart = motor_group(rightMotorA, rightMotorB);
-inertial DrivetrainInertial = inertial(PORT5);
+inertial DrivetrainInertial = inertial(PORT18);
 smartdrive Drivetrain = smartdrive(LeftDriveSmart, RightDriveSmart, DrivetrainInertial, 319.19, 320, 40, mm, 1);
-optical OpticalSensor = optical(PORT10);
 controller Controller1 = controller(primary);
-motor left_armMotorA = motor(PORT1, ratio18_1, true);
-motor left_armMotorB = motor(PORT3, ratio18_1, true);
-motor_group left_arm = motor_group(left_armMotorA, left_armMotorB);
-motor right_armMotorA = motor(PORT9, ratio18_1, false);
-motor right_armMotorB = motor(PORT2, ratio18_1, false);
-motor_group right_arm = motor_group(right_armMotorA, right_armMotorB);
+motor armsMotorA = motor(PORT16, ratio36_1, true);
+motor armsMotorB = motor(PORT13, ratio36_1, false);
+motor_group arms = motor_group(armsMotorA, armsMotorB);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable
@@ -39,10 +35,10 @@ int rc_auto_loop_function_Controller1() {
   while(true) {
     if(RemoteControlCodeEnabled) {
       // calculate the drivetrain motor velocities from the controller joystick axies
-      // left = Axis3
-      // right = Axis2
-      int drivetrainLeftSideSpeed = Controller1.Axis3.position();
-      int drivetrainRightSideSpeed = Controller1.Axis2.position();
+      // left = Axis3 + Axis1
+      // right = Axis3 - Axis1
+      int drivetrainLeftSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
+      int drivetrainRightSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
       
       // check if the value is inside of the deadband range
       if (drivetrainLeftSideSpeed < 5 && drivetrainLeftSideSpeed > -5) {
