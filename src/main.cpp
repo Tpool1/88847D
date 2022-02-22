@@ -5,7 +5,7 @@
 // [Name]               [Type]        [Port(s)]
 // Drivetrain           drivetrain    20, 19, 11, 12, 18
 // Controller1          controller                    
-// arms                 motor_group   16, 13          
+// arms                 motor_group   17, 13          
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 using namespace vex;
@@ -78,6 +78,28 @@ void autonomousRight(void) {
 
 }
 
+void autonomousMiddle(void) {
+
+  // initially lift arms to go down on goal
+  spin_arms_to_degree(90*4);
+
+  Drivetrain.turnToHeading(36, degrees);
+
+  // drive forward towards goal
+  Drivetrain.driveFor(forward, 60, inches); 
+
+  wait(1, sec);
+
+  // move down arms to clamp down on goal
+  spin_arms_to_degree(20*4);
+
+  Drivetrain.turnToHeading(24, degrees);
+
+  // drive back to initial position
+  Drivetrain.driveFor(reverse, 55, inches);
+
+}
+
 void usercontrol(void) {
 
   while (1) {
@@ -101,11 +123,9 @@ void usercontrol(void) {
 
 int main() {
 
-  Drivetrain.setDriveVelocity(65, percent);
+  Drivetrain.setDriveVelocity(70, percent);
 
-  arms.setVelocity(70, percent);
-
-  Competition.autonomous(autonomousLeft);
+  Competition.autonomous(autonomousMiddle);
 
   Competition.drivercontrol(usercontrol);
 

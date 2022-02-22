@@ -14,10 +14,10 @@ motor_group LeftDriveSmart = motor_group(leftMotorA, leftMotorB);
 motor rightMotorA = motor(PORT11, ratio18_1, true);
 motor rightMotorB = motor(PORT12, ratio18_1, true);
 motor_group RightDriveSmart = motor_group(rightMotorA, rightMotorB);
-inertial DrivetrainInertial = inertial(PORT18);
-smartdrive Drivetrain = smartdrive(LeftDriveSmart, RightDriveSmart, DrivetrainInertial, 319.19, 320, 40, mm, 1);
+inertial TurnGyroSmart = inertial(PORT18);
+smartdrive Drivetrain = smartdrive(LeftDriveSmart, RightDriveSmart, TurnGyroSmart, 319.19, 320, 40, mm, 1);
 controller Controller1 = controller(primary);
-motor armsMotorA = motor(PORT16, ratio36_1, true);
+motor armsMotorA = motor(PORT17, ratio36_1, true);
 motor armsMotorB = motor(PORT13, ratio36_1, false);
 motor_group arms = motor_group(armsMotorA, armsMotorB);
 
@@ -92,12 +92,12 @@ int rc_auto_loop_function_Controller1() {
 void vexcodeInit( void ) {
   Brain.Screen.print("Device initialization...");
   Brain.Screen.setCursor(2, 1);
-  // calibrate the drivetrain Inertial
+  // calibrate the drivetrain gyro
   wait(200, msec);
-  DrivetrainInertial.calibrate();
-  Brain.Screen.print("Calibrating Inertial for Drivetrain");
-  // wait for the Inertial calibration process to finish
-  while (DrivetrainInertial.isCalibrating()) {
+  TurnGyroSmart.calibrate();
+  Brain.Screen.print("Calibrating Gyro for Drivetrain");
+  // wait for the gyro calibration process to finish
+  while (TurnGyroSmart.isCalibrating()) {
     wait(25, msec);
   }
   // reset the screen now that the calibration is complete
